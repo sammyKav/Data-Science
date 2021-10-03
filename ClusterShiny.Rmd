@@ -40,8 +40,6 @@ ui <- fluidPage(
 
 
 
-
-
 ```{r server,echo=F}
 server <- function(input, output) {
 
@@ -50,16 +48,18 @@ server <- function(input, output) {
     cluster = kmeans(x = iris[,1:4],input$k,nstart=1)
     data <- cbind(iris,cluster$cluster)
     df2 <- as.data.frame(lapply(data,unlist))
-    ggplot(data,aes( x=df2$Sepal.Width, y=df2$Petal.Width,
-                color= as.factor(df2$cluster))) +
-    geom_point() + xlab("Width") + ylab("Length") +labs(colour = "K Clusters")
+    ggplot(df2,aes( x=df2$Sepal.Width, y=df2$Petal.Width,
+                color= as.factor(df2$cluster), shape = df2$Species)) +
+    geom_point(size = 3) + xlab("Width") + ylab("Length") +labs(colour = "K Clusters")
     
     })
 }    
    
+```
 
+```{r app, echo=F}
 # Create a shiny app
 shinyApp(
   ui = ui,
   server = server)
-
+```
